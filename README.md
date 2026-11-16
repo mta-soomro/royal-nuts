@@ -79,7 +79,7 @@ After setup, manually sign up with your own email, confirm it, sign in, edit you
 
 ## Deploy to Vercel
 
-Import `jawadjiskani1/Royal-Nuts` into your Vercel account with the **Next.js** framework preset and the repository root (`.`) as Root Directory. The repository already contains `package.json` at its top level. Use the default install/build settings (`npm install` / `npm run build`) and Production Branch `main`.
+Import `mta-soomro/royal-nuts` into your Vercel account with the **Next.js** framework preset and the repository root (`.`) as Root Directory. The repository already contains `package.json` at its top level. Use the default install/build settings (`npm install` / `npm run build`) and Production Branch `main`.
 
 Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` to the Vercel project environment before building. Copy any configured public contact/social variables from `.env.local` into Vercel as well. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS production URL, or leave it unset to use the Vercel-provided production URL automatically. Do not copy the localhost site URL into production. The running storefront does not require a Supabase secret/service-role key.
 
