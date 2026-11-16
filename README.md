@@ -86,3 +86,10 @@ Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` to the
 After deploying, set the Supabase Auth Site URL to the HTTPS production URL and allow that exact production origin followed by `/**` under Authentication > URL Configuration. Keep localhost redirect URLs for local development. Confirmation and password-reset links need the production allowlist to work on the live site. Rebuild after changing any `NEXT_PUBLIC_*` environment variables.
 
 Local env files, build output and test screenshots are excluded from CLI uploads by `.vercelignore`. Credentials must be configured through Vercel environment settings rather than committed or uploaded as env files.
+
+
+## Priced demo catalog
+
+Run `supabase/demo-products.sql` in Supabase SQL Editor after the schema to add 10 demo products with fictional PKR prices, pack sizes and sample inventory. It preserves existing rows and is safe to rerun. The `demo-` IDs and slugs are separate from real products, and the sample flag keeps them out of checkout.
+
+Alternatively, temporarily set a server-only `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` and run `npm run seed:demo`. Remove the write key afterward. Regenerate the SQL from `src/lib/demo-products.ts` with `npm run seed:sql`. Neither key is needed in Vercel for normal storefront use.

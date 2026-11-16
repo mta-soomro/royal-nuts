@@ -56,7 +56,7 @@ export default function ProductPurchase({ product }: { product: Product }) {
           <span className="min-w-8 text-center" aria-live="polite">{qty}</span>
           <button type="button" className="px-3 py-2.5" aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(50, q + 1))}>+</button>
         </div>
-        <button className="btn-navy flex-1 sm:flex-none sm:min-w-48" disabled={noPrice || soldOut}
+        <button className="btn-navy flex-1 sm:flex-none sm:min-w-48" disabled={noPrice || soldOut || product.isSample}
           onClick={() => {
             add({
               productId: product.id, variantId: variant.id, name: product.name, slug: product.slug,
@@ -66,10 +66,11 @@ export default function ProductPurchase({ product }: { product: Product }) {
             if (timer.current) clearTimeout(timer.current);
             timer.current = setTimeout(() => setAdded(false), 1800);
           }}>
-          <span aria-live="polite">{added ? "Added to cart" : "Add to cart"}</span>
+          <span aria-live="polite">{product.isSample ? "Demo product" : added ? "Added to cart" : "Add to cart"}</span>
         </button>
       </div>
-      {noPrice && <p className="mt-3 text-sm text-ink/60">This item is not available to order yet. Please contact us for availability.</p>}
+      {product.isSample && <p className="mt-3 text-sm text-ink/60">Demo prices and stock are for preview only. This sample cannot be purchased.</p>}
+      {noPrice && !product.isSample && <p className="mt-3 text-sm text-ink/60">This item is not available to order yet. Please contact us for availability.</p>}
     </div>
   );
 }

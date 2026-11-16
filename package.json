@@ -11,7 +11,9 @@
     "seed": "tsx scripts/seed.ts",
     "db:check": "tsx scripts/check-supabase.ts",
     "test:db": "tsx scripts/test-database.ts",
-    "test:browser": "node scripts/smoke-browser.mjs"
+    "test:browser": "node scripts/smoke-browser.mjs",
+    "seed:demo": "tsx scripts/seed.ts --demo",
+    "seed:sql": "tsx scripts/generate-demo-sql.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

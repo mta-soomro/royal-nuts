@@ -73,6 +73,24 @@ async function main() {
     assert.equal((await db.query<{ stock: number }>("select (data->'variants'->0->>'stock')::int as stock from public.products where id='almonds'")).rows[0].stock, 8);
     assert.equal((await db.query<{ n: number }>("select count(*)::int as n from public.orders")).rows[0].n, 1);
     assert.equal((await db.query<{ n: number }>("select count(*)::int as n from public.subscribers")).rows[0].n, 1);
+    const demoSql = await readFile("supabase/demo-products.sql", "utf8");
+    await db.exec(demoSql);
+    const demos = await db.query<{ id: string; data: { isSample: boolean; images: string[]; variants: { id: string; price: number; stock: number }[] } }>("select id,data from public.products where id like 'demo-%'");
+    assert.equal(demos.rows.length, 10);
+    for (const product of demos.rows) {
+      assert.equal(product.data.isSample, true);
+      assert.ok(product.data.images.length > 0);
+      assert.ok(product.data.variants.every((variant) => Number.isFinite(variant.price) && variant.price > 0 && variant.stock > 0));
+      assert.equal(new Set(product.data.variants.map((variant) => variant.id)).size, product.data.variants.length);
+    }
+    await db.exec("update public.products set data=jsonb_set(data,'{name}','\"Keep owner edits\"') where id='demo-premium-almonds'");
+    await db.exec(demoSql);
+    assert.equal((await db.query<{ name: string }>("select data->>'name' as name from public.products where id='demo-premium-almonds'")).rows[0].name, "Keep owner edits");
+    await asRole("authenticated", alice);
+    await assert.rejects(() => order([{ productId: "demo-premium-almonds", variantId: "demo-premium-almonds-250g", quantity: 1 }]), /out of stock or its price/);
+    await asRole("postgres");
+    assert.equal((await db.query<{ n: number }>("select count(*)::int as n from public.orders")).rows[0].n, 1);
+    console.log("Demo seed tests passed: 10 priced products, positive stock, rerun preserves owner edits, and sample checkout stays blocked.");
     console.log("Database tests passed: rerunnable schema, signup profile trigger, private profiles/orders/messages/subscribers, contact throttling, database pricing, delivery fees, stock rollback, duplicate-order protection, and email verification.");
   } finally { await db.close(); }
 }
