@@ -104,7 +104,9 @@ The Family Snack Gift Box is a family product. Dried fruit can pose a choking ri
 
 Visit `/admin` after signing in with a verified owner account. Set server-only `ADMIN_USER_IDS` to the owner's UUID from Supabase Authentication > Users. Configure `SUPABASE_SECRET_KEY` (or legacy `SUPABASE_SERVICE_ROLE_KEY`) on the server. Never prefix these variables with NEXT_PUBLIC_. Restart locally or redeploy after changes. The dashboard remains inaccessible without both a verified allowlisted identity and server credentials.
 
-The dashboard creates products with a pack size, verified PKR price, stock, local photo, ingredient/allergen information and storage instructions. Leave Publish unchecked to save a draft. It lists the latest 100 products and orders, customer delivery information, purchased items and totals. Orders advance pending > confirmed > shipped > delivered using conditional updates. Product edits, replenishment and cancellation/restocking still require a transactional database workflow; use Supabase for those operations with care. Creating products does not overwrite existing inventory.
+Use **Create a product** for new products or **Edit product** for existing listings. Add a pack for each net weight and enter its PKR price and count of sellable packs. Add the product details, ingredients and allergens, storage instructions, and a bundled image path or public Supabase Storage URL. Leave **Publish to storefront** unchecked to save a draft. If checkout or another owner changes stock while the editor is open, reopen the editor to get the current count before saving.
+
+The dashboard refreshes every 20 seconds while open and shows pending and newly received orders. Select **Enable desktop alerts** and allow browser notifications to receive a desktop alert while the dashboard is open. Review the delivery details and use **Confirm order**, **Mark shipped**, and **Mark delivered** to update the customer's order history.
 
 Launch sequence:
 1. Configure the owner UUID and server key, then verify `/admin` with an owner and an ordinary customer account.
@@ -114,5 +116,3 @@ Launch sequence:
 5. Set Supabase Auth Site URL and redirect allowlist to that origin. Configure production SMTP and verify confirmation and password-reset email delivery.
 6. Place a controlled cash-on-delivery order using your own customer account; verify final total, inventory deduction, customer order history and owner order processing before advertising the store.
 7. Establish your delivery area, fulfilment process, returns/refund terms, privacy notice and customer support process before public launch.
-
-Online payments, courier bookings, order notification emails, photo uploads, cancellation/restocking and a complete inventory editor are not implemented by the initial owner dashboard.
