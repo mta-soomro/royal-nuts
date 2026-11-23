@@ -16,7 +16,7 @@ try {
   await page.getByRole('heading', { name: 'Continue to checkout' }).waitFor();
   assert.equal(await page.getByRole('link', { name: 'Sign in', exact: true }).last().getAttribute('href'), '/login?next=%2Fcheckout');
   await page.getByRole('link', { name: 'Create a customer account' }).click();
-  assert.equal(new URL(page.url()).searchParams.get('next'), '/checkout');
+  await page.waitForURL((url) => url.pathname === '/signup' && url.searchParams.get('next') === '/checkout');
   await page.getByRole('button', { name: 'Create account', exact: true }).waitFor();
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
   await page.getByText('Enter your name.', { exact: true }).waitFor();
