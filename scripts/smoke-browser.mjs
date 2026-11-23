@@ -9,12 +9,14 @@ const page = await context.newPage();
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
 try {
-  for (const path of ['/account', '/checkout']) {
-    const response = await context.request.get(base + path, { maxRedirects: 0 });
-    assert.equal(response.status(), 307, `${path} requires login`);
-    assert.match(response.headers().location, /\/login\?next=/);
-  }
-  await page.goto(base + '/signup');
+  const account = await context.request.get(base + '/account', { maxRedirects: 0 });
+  assert.equal(account.status(), 307, '/account requires login');
+  assert.match(account.headers().location, /\/login\?next=/);
+  await page.goto(base + '/checkout');
+  await page.getByRole('heading', { name: 'Continue to checkout' }).waitFor();
+  assert.equal(await page.getByRole('link', { name: 'Sign in', exact: true }).last().getAttribute('href'), '/login?next=%2Fcheckout');
+  await page.getByRole('link', { name: 'Create a customer account' }).click();
+  assert.equal(new URL(page.url()).searchParams.get('next'), '/checkout');
   await page.getByRole('button', { name: 'Create account', exact: true }).waitFor();
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
   await page.getByText('Enter your name.', { exact: true }).waitFor();

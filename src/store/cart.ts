@@ -12,6 +12,7 @@ export interface CartLine {
   variantLabel: string;
   price: number;
   image?: string;
+  stock?: number;
   quantity: number;
 }
 
@@ -19,8 +20,8 @@ interface CartState {
   lines: CartLine[];
   open: boolean;
   add: (line: Omit<CartLine, "quantity">, qty?: number) => void;
-  setQty: (variantId: string, qty: number) => void;
-  remove: (variantId: string) => void;
+  setQty: (productId: string, variantId: string, qty: number) => void;
+  remove: (productId: string, variantId: string) => void;
   clear: () => void;
   setOpen: (open: boolean) => void;
 }
@@ -32,19 +33,19 @@ export const useCart = create<CartState>()(
       open: false,
       add: (line, qty = 1) =>
         set((s) => {
-          const existing = s.lines.find((l) => l.variantId === line.variantId);
+          const existing = s.lines.find((l) => l.productId === line.productId && l.variantId === line.variantId);
+          const limit = Math.min(50, line.stock ?? 50);
           const lines = existing
-            ? s.lines.map((l) => l.variantId === line.variantId ? { ...l, quantity: Math.min(l.quantity + qty, 50) } : l)
-            : [...s.lines, { ...line, quantity: qty }];
+            ? s.lines.map((l) => l === existing ? { ...line, quantity: Math.min(l.quantity + qty, limit) } : l)
+            : [...s.lines, { ...line, quantity: Math.min(qty, limit) }];
           return { lines, open: true };
         }),
-      setQty: (variantId, qty) =>
-        set((s) => ({
-          lines: qty <= 0
-            ? s.lines.filter((l) => l.variantId !== variantId)
-            : s.lines.map((l) => l.variantId === variantId ? { ...l, quantity: Math.min(qty, 50) } : l)
-        })),
-      remove: (variantId) => set((s) => ({ lines: s.lines.filter((l) => l.variantId !== variantId) })),
+      setQty: (productId, variantId, qty) =>
+        set((s) => ({ lines: s.lines.flatMap((l) => {
+          if (l.productId !== productId || l.variantId !== variantId) return [l];
+          return qty > 0 ? [{ ...l, quantity: Math.min(qty, 50, l.stock ?? 50) }] : [];
+        }) })),
+      remove: (productId, variantId) => set((s) => ({ lines: s.lines.filter((l) => l.productId !== productId || l.variantId !== variantId) })),
       clear: () => set({ lines: [] }),
       setOpen: (open) => set({ open })
     }),

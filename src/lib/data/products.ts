@@ -17,6 +17,7 @@ const loadAll = cache(async (): Promise<Product[]> => {
     .select("id, data")
     .eq("active", true);
   if (error) throw new Error(`Could not load products from Supabase: ${error.message}`);
+  if (!data.length) return SAMPLE_PRODUCTS;
   return data.map((row) => ({ ...(row.data as Omit<Product, "id">), id: row.id }));
 });
 
@@ -64,7 +65,11 @@ export async function queryProducts(opts: ProductQuery) {
 }
 
 export async function getProductBySlug(slug: string) {
-  return (await loadAll()).find((p) => p.slug === slug) ?? null;
+  const products = await loadAll();
+  const alternateSlug = slug.startsWith("demo-") ? slug.slice(5) : `demo-${slug}`;
+  return products.find((p) => p.slug === slug)
+    ?? products.find((p) => p.slug === alternateSlug && (p.isSample || slug.startsWith("demo-")))
+    ?? null;
 }
 export async function getFeatured(limit = 4) {
   return (await loadAll()).filter((p) => p.featured).slice(0, limit);

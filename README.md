@@ -57,7 +57,7 @@ The seed command imports missing placeholders without overwriting existing produ
 2. Run `npm run seed`.
 3. Remove the service-role key afterward. It is not required for normal storefront use.
 
-Seed products have placeholder content, zero prices and zero stock; fill in your real catalog before accepting orders. A configured database with no active products intentionally shows an empty shop.
+Seed products have placeholder content, zero prices and zero stock. The storefront displays a preview catalog when the database has no active products. Publish verified prices and stock to accept orders.
 
 `/checkout` requires a signed-in, email-verified customer. The only implemented payment method is cash on delivery. The delivery fee is read from `store_settings.shipping_fee` (initially zero/free). No bank, card or wallet payment is collected by this app.
 

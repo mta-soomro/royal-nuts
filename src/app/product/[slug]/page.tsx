@@ -8,7 +8,7 @@ import { getProductBySlug, getRelated, startingPrice } from "@/lib/data/products
 import { categoryName } from "@/lib/categories";
 import { whatsappLink } from "@/lib/site";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {

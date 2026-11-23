@@ -18,6 +18,7 @@ export default function ProductPurchase({ product }: { product: Product }) {
 
   const noPrice = variant.price <= 0;
   const soldOut = variant.stock <= 0;
+  const quantityLimit = Math.min(50, variant.stock);
   const saving = variant.compareAtPrice && variant.compareAtPrice > variant.price
     ? Math.round(((variant.compareAtPrice - variant.price) / variant.compareAtPrice) * 100) : 0;
 
@@ -43,7 +44,7 @@ export default function ProductPurchase({ product }: { product: Product }) {
             <label key={v.id}
               className={`cursor-pointer border px-4 py-2 text-sm ${v.id === variantId ? "border-navy bg-navy text-cream" : "border-navy/25 bg-white hover:border-gold-dark"}`}>
               <input type="radio" name="variant" value={v.id} checked={v.id === variantId}
-                onChange={() => setVariantId(v.id)} className="sr-only" />
+                onChange={() => { setVariantId(v.id); setQty(1); setAdded(false); }} className="sr-only" />
               {v.label}
             </label>
           ))}
@@ -54,13 +55,13 @@ export default function ProductPurchase({ product }: { product: Product }) {
         <div className="flex items-center border border-navy/25 bg-white">
           <button type="button" className="px-3 py-2.5" aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
           <span className="min-w-8 text-center" aria-live="polite">{qty}</span>
-          <button type="button" className="px-3 py-2.5" aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(50, q + 1))}>+</button>
+          <button type="button" className="px-3 py-2.5" aria-label="Increase quantity" disabled={qty >= quantityLimit} onClick={() => setQty((q) => Math.min(quantityLimit, q + 1))}>+</button>
         </div>
         <button className="btn-navy flex-1 sm:flex-none sm:min-w-48" disabled={noPrice || soldOut || product.isSample}
           onClick={() => {
             add({
               productId: product.id, variantId: variant.id, name: product.name, slug: product.slug,
-              variantLabel: variant.label, price: variant.price, image: product.images[0]
+              variantLabel: variant.label, price: variant.price, image: product.images[0], stock: variant.stock
             }, qty);
             setAdded(true);
             if (timer.current) clearTimeout(timer.current);

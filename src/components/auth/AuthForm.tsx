@@ -131,7 +131,7 @@ export default function AuthForm({ mode, next, linkError = false }: { mode: Mode
     if (errors.email) { setTouched((t) => ({ ...t, email: true })); return; }
     setBusy("reset");
     try {
-      await resendVerification(values.email);
+      await resendVerification(values.email, next);
       setInfo("If your account needs verification, a confirmation email is on its way.");
     } catch (err) { setError(friendlyAuthError(err)); }
     finally { setBusy(null); }

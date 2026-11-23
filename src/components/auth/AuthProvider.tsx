@@ -14,7 +14,7 @@ interface AuthContextValue {
   signUp: (name: string, email: string, password: string, next?: string) => Promise<boolean>;
   signInWithGoogle: (next?: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  resendVerification: (email?: string) => Promise<void>;
+  resendVerification: (email?: string, next?: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -77,12 +77,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
   }, []);
 
-  const resendVerification = useCallback(async (email?: string) => {
+  const resendVerification = useCallback(async (email?: string, next = "/account") => {
     const address = email?.trim() || (await requireAuth().auth.getUser()).data.user?.email;
     if (!address) throw new Error("Enter your email address first.");
     const { error } = await requireAuth().auth.resend({
       type: "signup", email: address,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/account` }
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` }
     });
     if (error) throw error;
   }, []);

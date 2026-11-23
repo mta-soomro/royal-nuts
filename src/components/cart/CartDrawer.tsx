@@ -40,20 +40,20 @@ export default function CartDrawer() {
           <>
             <ul className="flex-1 divide-y divide-gold/20 overflow-y-auto px-5">
               {lines.map((l) => (
-                <li key={l.variantId} className="flex gap-3 py-4">
+                <li key={`${l.productId}:${l.variantId}`} className="flex gap-3 py-4">
                   <ProductImage src={l.image} alt={l.name} sizes="5rem" className="h-20 w-20 shrink-0 rounded-sm" />
                   <div className="min-w-0 flex-1">
                     <Link href={`/product/${l.slug}`} onClick={() => setOpen(false)} className="font-medium leading-tight hover:text-gold-dark">{l.name}</Link>
                     <p className="text-sm text-ink/60">{l.variantLabel}</p>
                     <div className="mt-2 flex items-center justify-between">
                       <div className="flex items-center rounded-sm border border-navy/20">
-                        <button className="px-2.5 py-1" aria-label={`Decrease ${l.name} quantity`} onClick={() => setQty(l.variantId, l.quantity - 1)}>−</button>
+                        <button className="px-2.5 py-1" aria-label={`Decrease ${l.name} quantity`} onClick={() => setQty(l.productId, l.variantId, l.quantity - 1)}>−</button>
                         <span className="min-w-6 text-center text-sm" aria-live="polite">{l.quantity}</span>
-                        <button className="px-2.5 py-1" aria-label={`Increase ${l.name} quantity`} onClick={() => setQty(l.variantId, l.quantity + 1)}>+</button>
+                        <button className="px-2.5 py-1" aria-label={`Increase ${l.name} quantity`} disabled={l.quantity >= Math.min(50, l.stock ?? 50)} onClick={() => setQty(l.productId, l.variantId, l.quantity + 1)}>+</button>
                       </div>
                       <span className="text-sm font-semibold">{formatPKR(l.price * l.quantity)}</span>
                     </div>
-                    <button onClick={() => remove(l.variantId)} className="mt-1 text-xs text-ink/60 underline hover:text-ink">Remove</button>
+                    <button onClick={() => remove(l.productId, l.variantId)} className="mt-1 text-xs text-ink/60 underline hover:text-ink">Remove</button>
                   </div>
                 </li>
               ))}
