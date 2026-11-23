@@ -47,7 +47,7 @@ export default async function Home() {
               <Link href="/shop?category=gift-boxes" className="btn-outline">Explore Our Collection</Link>
             </div>
           </div>
-          <HeroVisual src={site.heroImage || "/hero/hero.svg"} />
+          <HeroVisual src={site.heroImage || "/hero/hero.jpg"} />
         </div>
       </section>
 

@@ -9,7 +9,7 @@ const v = (p: string, ...labels: [string, number][]): Variant[] =>
 const std = (p: string) => v(p, ["250g", 250], ["500g", 500], ["1kg", 1000]);
 
 const base = {
-  images: [] as string[], // filled per product below from /public/products/<slug>.svg
+  images: [] as string[], // filled per product below from /public/products/<slug>.jpg
   ingredients: "Sample text. Add the real ingredients.",
   storage: "Sample text. Add storage instructions.",
   active: true,
@@ -49,9 +49,9 @@ const RAW_SAMPLES: Product[] = [
     variants: v("royal-gift-box", ["Gift box", 0]), featured: true, bestSeller: false }
 ];
 
-// Illustrated placeholder artwork shipped in /public/products. Replace with real photos
+// Reference stock photography shipped in /public/products. Replace with real photos
 // (upload via the admin dashboard once it exists, or drop files in /public and edit here).
 export const SAMPLE_PRODUCTS: Product[] = RAW_SAMPLES.map((p) => ({
   ...p,
-  images: [`/products/${p.slug}.svg`]
+  images: [`/products/${p.slug}.jpg`]
 }));

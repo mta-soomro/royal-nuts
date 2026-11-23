@@ -1,0 +1,11 @@
+import { requireAdmin } from "@/lib/admin";
+import { ProductForm, OrderButton } from "@/components/admin/AdminForms";
+import { formatPKR } from "@/lib/format";
+export const metadata = { title: "Store administration", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
+export default async function AdminPage() {
+ let db;
+ try { db = await requireAdmin(); } catch { return <main className="container-page py-16"><h1 className="text-3xl">Owner access required</h1><p className="mt-4">Sign in with your verified administrator account. The owner must configure ADMIN_USER_IDS and a server-only Supabase key.</p><a href="/login?next=/admin" className="btn-navy mt-6">Sign in</a></main>; }
+ const [products,orders]=await Promise.all([db.from("products").select("id,active,data").order("created_at",{ascending:false}).limit(100),db.from("orders").select("id,status,created_at,full_name,email,phone,address,city,notes,total,items").order("created_at",{ascending:false}).limit(100)]);
+ return <main className="container-page space-y-8 py-12"><h1 className="text-4xl">Store administration</h1>{(products.error||orders.error)&&<p role="alert">Some records could not be loaded. Check database configuration.</p>}<div className="grid gap-8 lg:grid-cols-2"><ProductForm/><section><h2 className="text-2xl">Catalog (latest 100)</h2>{products.data?.map(p=><article key={p.id} className="mt-3 border border-gold/30 p-4"><strong>{p.data.name}</strong><p>{p.id} · {p.active?"Active":"Draft"}{p.data.isSample?" · Sample":""}</p><p>{p.data.variants?.map((v:{label:string;stock:number;price:number})=>`${v.label}: ${v.stock} packs / ${formatPKR(v.price)}`).join("; ")}</p></article>)}</section></div><section><h2 className="text-2xl">Orders (latest 100)</h2>{!orders.data?.length&&<p>No orders yet.</p>}{orders.data?.map(o=><article key={o.id} className="mt-4 space-y-2 border border-gold/30 bg-white p-6"><h3 className="font-semibold">{o.full_name} · {formatPKR(o.total)} · {o.status}</h3><p className="break-all text-sm">{o.id} · {new Date(o.created_at).toISOString()}</p><p>{o.phone} · {o.email}</p><p>{o.address}, {o.city}</p><p>{o.notes}</p><pre className="overflow-auto whitespace-pre-wrap text-sm">{JSON.stringify(o.items,null,2)}</pre><OrderButton id={o.id} status={o.status}/></article>)}</section></main>;
+}

@@ -148,7 +148,7 @@ export default function AuthForm({ mode, next, linkError = false }: { mode: Mode
       <div className="mx-auto grid max-w-4xl overflow-hidden border border-gold/40 bg-white lg:grid-cols-[1fr_1.1fr]">
         {/* Brand panel */}
         <div className="relative hidden bg-navy lg:block">
-          <Image src={site.heroImage || "/hero/hero.svg"} alt="" fill sizes="26rem" className="object-contain object-top" unoptimized={(site.heroImage || "/hero/hero.svg").endsWith(".svg")} />
+          <Image src={site.heroImage || "/hero/hero.jpg"} alt="" fill sizes="26rem" className="object-contain object-top" unoptimized={(site.heroImage || "/hero/hero.jpg").endsWith(".svg")} />
           <div className="absolute inset-x-0 bottom-0 p-8">
             <p className="font-serif text-2xl text-cream">{site.slogan}</p>
             <p className="mt-1 text-sm text-cream/70">{site.altSlogan}</p>

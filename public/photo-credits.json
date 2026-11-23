@@ -1,0 +1,56 @@
+{
+  "license": "https://www.pexels.com/license/",
+  "note": "Reference stock photos; date cultivars and actual gift packaging are not verified.",
+  "photos": [
+    {
+      "category": "almonds",
+      "source": "https://www.pexels.com/photo/7771998/",
+      "local": "/categories/almonds.jpg"
+    },
+    {
+      "category": "cashews",
+      "source": "https://www.pexels.com/photo/4663476/",
+      "local": "/categories/cashews.jpg"
+    },
+    {
+      "category": "pistachios",
+      "source": "https://www.pexels.com/photo/5425014/",
+      "local": "/categories/pistachios.jpg"
+    },
+    {
+      "category": "walnuts",
+      "source": "https://www.pexels.com/photo/3904510/",
+      "local": "/categories/walnuts.jpg"
+    },
+    {
+      "category": "raisins",
+      "source": "https://www.pexels.com/photo/6086413/",
+      "local": "/categories/raisins.jpg"
+    },
+    {
+      "category": "dates",
+      "source": "https://www.pexels.com/photo/4461563/",
+      "local": "/categories/dates.jpg"
+    },
+    {
+      "category": "figs",
+      "source": "https://www.pexels.com/photo/10323346/",
+      "local": "/categories/figs.jpg"
+    },
+    {
+      "category": "peanuts",
+      "source": "https://www.pexels.com/photo/7717463/",
+      "local": "/categories/peanuts.jpg"
+    },
+    {
+      "category": "mixed-nuts",
+      "source": "https://www.pexels.com/photo/6928273/",
+      "local": "/categories/mixed-nuts.jpg"
+    },
+    {
+      "category": "gift-boxes",
+      "source": "https://www.pexels.com/photo/32281733/",
+      "local": "/categories/gift-boxes.jpg"
+    }
+  ]
+}

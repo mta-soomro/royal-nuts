@@ -25,6 +25,7 @@ function Placeholder({ alt, className }: { alt: string; className: string }) {
 export default function ProductImage({
   src, alt, className = "", priority = false, sizes = sizesDefault, zoomOnHover = false
 }: { src?: string; alt: string; className?: string; priority?: boolean; sizes?: string; zoomOnHover?: boolean }) {
+  if (src && /^\/products\/[^/]+\.svg$/.test(src)) src = src.replace(/\.svg$/, ".jpg");
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
 
   if (!src || state === "failed") return <Placeholder alt={alt} className={className} />;

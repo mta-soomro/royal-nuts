@@ -93,3 +93,20 @@ Local env files, build output and test screenshots are excluded from CLI uploads
 Run `supabase/demo-products.sql` in Supabase SQL Editor after the schema to add 10 demo products with fictional PKR prices, pack sizes and sample inventory. It preserves existing rows and is safe to rerun. The `demo-` IDs and slugs are separate from real products, and the sample flag keeps them out of checkout.
 
 Alternatively, temporarily set a server-only `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` and run `npm run seed:demo`. Remove the write key afterward. Regenerate the SQL from `src/lib/demo-products.ts` with `npm run seed:sql`. Neither key is needed in Vercel for normal storefront use.
+
+## Owner dashboard and business launch
+
+Visit `/admin` after signing in with a verified owner account. Set server-only `ADMIN_USER_IDS` to the owner's UUID from Supabase Authentication > Users. Configure `SUPABASE_SECRET_KEY` (or legacy `SUPABASE_SERVICE_ROLE_KEY`) on the server. Never prefix these variables with NEXT_PUBLIC_. Restart locally or redeploy after changes. The dashboard remains inaccessible without both a verified allowlisted identity and server credentials.
+
+The dashboard creates products with a pack size, verified PKR price, stock, local photo, ingredient/allergen information and storage instructions. Leave Publish unchecked to save a draft. It lists the latest 100 products and orders, customer delivery information, purchased items and totals. Orders advance pending > confirmed > shipped > delivered using conditional updates. Product edits, replenishment and cancellation/restocking still require a transactional database workflow; use Supabase for those operations with care. Creating products does not overwrite existing inventory.
+
+Launch sequence:
+1. Configure the owner UUID and server key, then verify `/admin` with an owner and an ordinary customer account.
+2. Add real products, pack sizes, prices and inventory. Stock photos are reference imagery; verify suitability for your actual goods.
+3. Configure store_settings with business contact details and delivery charges.
+4. Deploy to Vercel with public Supabase configuration, server-only owner settings, and NEXT_PUBLIC_SITE_URL pointing to the deployed HTTPS origin.
+5. Set Supabase Auth Site URL and redirect allowlist to that origin. Configure production SMTP and verify confirmation and password-reset email delivery.
+6. Place a controlled cash-on-delivery order using your own customer account; verify final total, inventory deduction, customer order history and owner order processing before advertising the store.
+7. Establish your delivery area, fulfilment process, returns/refund terms, privacy notice and customer support process before public launch.
+
+Online payments, courier bookings, order notification emails, photo uploads, cancellation/restocking and a complete inventory editor are not implemented by the initial owner dashboard.
